@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para mi amorcito 💗</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Quicksand:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; font-family:'Quicksand', sans-serif; overflow:hidden; background: linear-gradient(to bottom right,#ffe6f0,#fff0f5); }
+
+  .slide { position:absolute; top:0; left:0; width:100%; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; opacity:0; transform: scale(0.9); transition: all 0.8s ease; }
+  .active { opacity:1; transform: scale(1); z-index:1; }
+
+  h1 { font-family:'Playfair Display', serif; font-size:4rem; margin-bottom:1rem; animation: bounceIn 1s forwards; }
+  p { font-size:2rem; line-height:1.5; margin-bottom:2rem; animation: fadeIn 1.2s forwards; position:relative; }
+
+  button { font-family:inherit; cursor:pointer; border:none; outline:none; border-radius:60px; padding:1rem 2rem; font-size:1.5rem; background:#ff7eb9; color:white; transition: all 0.3s ease; }
+  button:hover { transform: scale(1.2) rotate(-5deg); }
+  .btn-letter { width:120px; height:120px; font-size:2rem; display:flex; justify-content:center; align-items:center; border-radius:50%; background:#ffb6c1; animation: popIn 0.6s forwards; }
+
+  .popup { position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); background:#fff0f5; padding:2.5rem; border-radius:25px; box-shadow:0 4px 15px rgba(0,0,0,0.2); display:flex; flex-direction:column; align-items:center; transition: all 0.5s ease; z-index:100; }
+  .popup.show { transform:translate(-50%, -50%) scale(1); }
+  .popup button { font-size:1.5rem; padding:0.8rem 1.8rem; border-radius:30px; }
+
+  .hearts { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; }
+  .hearts span { position:absolute; font-size:2rem; animation: floatUp 6s linear infinite; cursor:pointer; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(1); opacity:1; }
+    100% { transform: translateY(-10vh) scale(0.5); opacity:0; }
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes popIn { from{transform:scale(0)} to{transform:scale(1)} }
+  @keyframes bounceIn { 0%{transform:scale(0.5)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+  @media(max-width:600px){
+    h1 { font-size:3rem; }
+    p { font-size:1.5rem; }
+    button { padding:0.8rem 1.5rem; font-size:1.2rem; }
+    .btn-letter { width:100px; height:100px; font-size:1.5rem; }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="slide active" id="slide1">
+  <h1>Hola, amor! 🤍</h1>
+  <p>Tengo algo para ti,<br>No es grande,<br>Pero está hecho con mucho amor.</p>
+  <button class="btn-letter" onclick="nextSlide()">💌 Abrir</button>
+</div>
+
+<div class="slide" id="slide2">
+  <p id="cuteText">Quién diría que entre scouts, viajes y kilómetros, iba a encontrarte a ti. 🌟✨🌸</p>
+  <button class="btn" onclick="animateEmoji('cuteText')">💗 Siguiente</button>
+</div>
+
+<div class="slide" id="slide3">
+  <p>Empezamos con bromas, seguimos con abrazos… <br>y ahora hacemos que la distancia funcione. 💕😘</p>
+  <button class="btn" onclick="nextSlide()">QUICK QUIZ</button>
+</div>
+
+<div class="slide" id="slide4">
+  <p>Entre los Scouts y estudiar… ¿te acuerdas de mí también?</p>
+  <div>
+    <button class="btn" onclick="quizChoice('a')">🌸 Ups, me acordo… a veces</button>
+    <button class="btn" onclick="quizChoice('b')">💓 Obvio, entre una lección y otra</button>
+    <button class="btn" onclick="quizChoice('c')">💗 Por supuesto</button>
+  </div>
+</div>
+
+<div class="slide" id="slide5">
+  <p>Jajaja, estoy segura💗</p>
+  <button class="btn" onclick="nextSlide()">Porque…</button>
+</div>
+
+<div class="slide" id="slide6">
+  <p>Algún día</p>
+  <p id="slide6Click" onclick="revealGift()">no habrá pantallas,<br>solo abrazos largos.</p>
+</div>
+
+<div class="slide" id="slideFinal">
+  <h1 id="finalText">Te amo!💗</h1>
+  <div class="hearts" id="heartsContainer"></div>
+</div>
+
+<div class="popup" id="popup">
+  <p id="popupText"></p>
+  <button onclick="closePopup()">OK</button>
+</div>
+
+<script>
+let currentSlide = 1;
+const totalSlides = 7;
+
+function nextSlide(){
+  document.getElementById('slide'+currentSlide).classList.remove('active');
+  currentSlide++;
+  if(currentSlide>totalSlides) currentSlide=totalSlides;
+  const next=document.getElementById('slide'+currentSlide);
+  next.classList.add('active');
+  next.querySelectorAll('h1,p,button').forEach(el=>{ el.style.animation='popIn 0.6s forwards'; });
+}
+
+function quizChoice(choice){
+  const popup=document.getElementById('popup');
+  if(choice==='c'){ popup.classList.remove('show'); nextSlide(); }
+  else if(choice==='a'){ document.getElementById('popupText').innerText='Vaya… 🙄'; popup.classList.add('show'); }
+  else if(choice==='b'){ document.getElementById('popupText').innerText='Al menos eres honesto…💞'; popup.classList.add('show'); }
+}
+function closePopup(){ document.getElementById('popup').classList.remove('show'); }
+
+function animateEmoji(id){
+  const container=document.getElementById(id);
+  for(let i=0;i<5;i++){
+    const span=document.createElement('span');
+    span.innerText=['🌸','✨','💫','💖','💗'][Math.floor(Math.random()*5)];
+    span.style.position='absolute';
+    span.style.left=Math.random()*80+'%';
+    span.style.top=Math.random()*80+'%';
+    span.style.fontSize=(20+Math.random()*30)+'px'; // mai mari
+    container.appendChild(span);
+    setTimeout(()=>span.remove(),1000+Math.random()*1000);
+  }
+  setTimeout(nextSlide,1200);
+}
+
+function createHeart(){
+  const heartsContainer=document.getElementById('heartsContainer');
+  const span=document.createElement('span');
+  span.innerText='💗';
+  span.style.left=Math.random()*100+'%';
+  span.style.fontSize=(30+Math.random()*30)+'px'; // mai mari
+  span.style.animationDuration=(4+Math.random()*4)+'s';
+  span.onclick=()=>{ span.style.transform='scale(1.5)'; setTimeout(()=>span.remove(),400); };
+  heartsContainer.appendChild(span);
+  setTimeout(()=>span.remove(),6000);
+}
+
+function revealGift(){
+  const slide6=document.getElementById('slide6');
+  const giftBtn=document.createElement('button');
+  giftBtn.className='btn-letter';
+  giftBtn.innerText='🎁';
+  giftBtn.style.marginTop='1rem';
+  giftBtn.onclick=()=>{ revealFinalSlide(); };
+  slide6.appendChild(giftBtn);
+}
+
+function revealFinalSlide(){
+  document.getElementById('slide6').classList.remove('active');
+  const final=document.getElementById('slideFinal');
+  final.classList.add('active');
+
+  const finalText=document.getElementById('finalText');
+  finalText.style.transform='scale(0)';
+  finalText.style.opacity=0;
+  finalText.style.transition='all 1s ease';
+  setTimeout(()=>{
+    finalText.style.transform='scale(1)';
+    finalText.style.opacity=1;
+  },100);
+
+  setInterval(createHeart,500);
+}
+</script>
+
+</body>
+</html>
